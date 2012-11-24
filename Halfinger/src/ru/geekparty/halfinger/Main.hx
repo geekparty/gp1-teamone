@@ -5,6 +5,8 @@ import nme.display.Sprite;
 import nme.events.Event;
 import nme.Lib;
 
+import nme.media.Sound;
+
 /**
  * ...
  * @author Null/
@@ -14,6 +16,9 @@ class Main extends Sprite
 {
 	
 	var game:Game;
+	
+	private static inline var viewPortW:Int = 480;
+	private static inline var viewPortH:Int = 800;
 	
 	public function new() 
 	{
@@ -32,6 +37,10 @@ class Main extends Sprite
 		var game:Game = new Game();
 		game.Start();
 		addChild(game);
+		
+		
+		var scale:Float =  stage.stageWidth / viewPortW;
+		game.scaleX = game.scaleY = scale;
 		
 		addChild( new FPS(10,10,0xffffff));
 	}

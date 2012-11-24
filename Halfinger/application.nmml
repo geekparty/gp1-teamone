@@ -8,17 +8,22 @@
 	<!-- output -->
 	<app main="ru.geekparty.halfinger.Main" file="Halfinger" path="bin" />
 	
-	<window background="#000000" fps="60" />
+	<window background="#000000" fps="30" />
 	<window width="480" height="800" unless="mobile" />
 	<window orientation="landscape" vsync="true" antialiasing="0" if="cpp" />
 	
 	<!-- classpath, haxe libs -->
 	<source path="src" />
 	<haxelib name="nme" />
+	<haxelib name="actuate"/>
 	
 	<!-- assets -->
 	<icon path="assets/nme.svg" />
 	<assets path="assets/img" rename="img" />
+
+	<assets path="assets/music" rename="assets/music" type="music" include="*" />
+
+
 	
 	<!-- swf library -->
 	<library path="assets/resources.swf" /> 

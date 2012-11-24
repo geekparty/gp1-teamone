@@ -18,10 +18,15 @@ class Girl extends Sprite
 	private var _titRight:MovieClip;
 	private var _body:MovieClip;
 	private var _cunt:MovieClip;
+	
+	public var scoreMultipler : Float;
 
 	public function new() 
 	{
 		super();
+		
+		scoreMultipler = 1;
+		
 		_container = new GirlContainer();
 		
 		_face = cast _container.getChildByName("face");
@@ -29,22 +34,51 @@ class Girl extends Sprite
 		_titRight = cast _container.getChildByName("titRight");
 		_body = cast _container.getChildByName("body");
 		_cunt = cast _container.getChildByName("cunt");
+		_container.removeChild( _body );
+		
+		_face.gotoAndStop(1);
+		_titLeft.gotoAndStop(1);
+		_titRight.gotoAndStop(1);
+		_body.gotoAndStop(1);
+		_cunt.gotoAndStop(1);
 		
 		_face.addEventListener( MouseEvent.MOUSE_DOWN, onTouch );
-		_face.addEventListener( MouseEvent.MOUSE_UP, onRelease );
 		_titLeft.addEventListener( MouseEvent.MOUSE_DOWN, onTouch );
-		_titLeft.addEventListener( MouseEvent.MOUSE_UP, onRelease );
 		_titRight.addEventListener( MouseEvent.MOUSE_DOWN, onTouch );
-		_titRight.addEventListener( MouseEvent.MOUSE_UP, onRelease );
-		_body.addEventListener( MouseEvent.MOUSE_DOWN, onTouch );
-		_body.addEventListener( MouseEvent.MOUSE_UP, onRelease );
+		//_body.addEventListener( MouseEvent.MOUSE_DOWN, onTouch );
 		_cunt.addEventListener( MouseEvent.MOUSE_DOWN, onTouch );
-		_cunt.addEventListener( MouseEvent.MOUSE_UP, onRelease );
+		
+		addEventListener( Event.ADDED_TO_STAGE, onStageInit );
 		
 		addChild( _container );
 	}
 	
-	private function onTouch( e:MouseEvent ):Void { dispatchEvent( new Event("girlTouched") ); }
-	private function onRelease( e:MouseEvent ):Void { dispatchEvent( new Event("girlReleased") ); }
+	private function onStageInit( e: Event ):Void
+	{
+		stage.addEventListener( MouseEvent.MOUSE_UP, onRelease );
+	}
+	
+	private function onTouch( e:MouseEvent ):Void 
+	{
+		cast(e.currentTarget, MovieClip).play();
+		switch( cast(e.currentTarget, MovieClip).name )
+		{
+			case "face"     : scoreMultipler = 0.8;
+			case "titLeft"  : scoreMultipler = 0.6;
+			case "titRight" : scoreMultipler = 0.6;
+			//case "body"     : scoreMultipler = 1;
+			case "cunt"     : scoreMultipler = 0.2;
+		}
+		dispatchEvent( new Event("girlTouched") );
+	}
+	private function onRelease( e:MouseEvent ):Void
+	{
+		_face.gotoAndStop(1);
+		_titLeft.gotoAndStop(1);
+		_titRight.gotoAndStop(1);
+		_body.gotoAndStop(1);
+		_cunt.gotoAndStop(1);
+		dispatchEvent( new Event("girlReleased") );
+	}
 	
 }
