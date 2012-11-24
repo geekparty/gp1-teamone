@@ -3,6 +3,8 @@ import nme.display.Sprite;
 import nme.events.Event;
 import nme.Lib;
 import nme.Assets;
+import nme.text.TextField;
+import nme.text.TextFormat;
 import ru.geekparty.game.AnimatedSprite;
 import ru.geekparty.game.Animation;
 import ru.geekparty.game.IUpdatable;
@@ -23,6 +25,10 @@ class Game extends Sprite
 	public var _tickDt:Float;
 	
 	public var _updatable:Array<IUpdatable>;
+	private var _girl : Girl;
+	private var _scoreText : TextField;
+	private var _score : Int = 0;
+	private var _scoreCounting : Bool = false;
 
 	public function new() 
 	{
@@ -31,28 +37,34 @@ class Game extends Sprite
 		_updatable = [];
 		_tickDt = 1.0 / FPS;
 	
-		addChild( new Girl() );
+		addChild( _girl = new Girl() );
+		_girl.addEventListener( "girlTouched", onGirlTouched );
+		_girl.addEventListener( "girlReleased", onGirlReleased );
+		
+		addEventListener( Event.ADDED_TO_STAGE, onStageInit );
+		
+		_scoreText = new TextField();
+		_scoreText.defaultTextFormat = new TextFormat( "Arial", 16, 0xFFFFFF );
+		_scoreText.text = "Очки: ";
+		_scoreText.x = 10;
+		_scoreText.y = 30;
+		addChild( _scoreText );
 	}
 	
-	private function spawnGirl(x:Float, y:Float):Void
+	private function onStageInit( e:Event ):Void
 	{
-		var girl:AnimatedSprite = new AnimatedSprite([new TextureAtlas(Assets.getBitmapData("img/girl.png")
-													  , Assets.getText("img/girl.json"))]);
-		
-		girl.addAnimation( "sample"
-						  , 0
-						  , ["little_girl_01.png", "little_girl_02.png"]
-						  , 4, true );
-						  
-		girl.playAnimation( "sample" );
-		girl.x = x;
-		girl.y = y;
-													
-		_updatable.push(girl);
-		
-		addChild(girl);
+		_girl.x = stage.stageWidth / 2;
+		_girl.y = stage.stageHeight / 2;
 	}
 	
+	private function onGirlTouched( e:Event ):Void { Lib.trace("Нажал бабу!"); _scoreCounting = true; }
+	private function onGirlReleased( e:Event ):Void { Lib.trace("Отпусиил бабу!"); _scoreCounting = false; }
+	
+	private function getScore( dt : Float ):Int
+	{
+		return Math.floor(dt / 1000);
+	}
+
 	public function Start():Void
 	{
 		frame = 0;
@@ -68,10 +80,7 @@ class Game extends Sprite
 	
 	
 	public function onFrame(e:Event):Void
-	{
-		
-		//TODO: Определиться с надобностью этого кода
-		return;
+	{	
 		var timer:Float =  Lib.getTimer();
 		
 		var frames:Int = 0;
@@ -87,6 +96,15 @@ class Game extends Sprite
 		_lastTickTime = timer;
 		frame += frames;
 		if (frames > MAX_TICKS) frames = MAX_TICKS;
+		
+		if ( _score > 1000 )
+		{
+			Lib.trace("You won!");
+			return;
+		}
+		_score += _scoreCounting ? getScore( _lastTickTime ) : 0;
+
+		_scoreText.text = "Очки: " + _score;
 		
 		for (i in 0...frames)
 		{

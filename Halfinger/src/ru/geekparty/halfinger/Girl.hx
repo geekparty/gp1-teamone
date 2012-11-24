@@ -1,6 +1,8 @@
 package ru.geekparty.halfinger;
 import format.swf.MovieClip;
 import nme.display.Sprite;
+import nme.events.Event;
+import nme.events.MouseEvent;
 
 /**
  * ...
@@ -28,9 +30,21 @@ class Girl extends Sprite
 		_body = cast _container.getChildByName("body");
 		_cunt = cast _container.getChildByName("cunt");
 		
-		
+		_face.addEventListener( MouseEvent.MOUSE_DOWN, onTouch );
+		_face.addEventListener( MouseEvent.MOUSE_UP, onRelease );
+		_titLeft.addEventListener( MouseEvent.MOUSE_DOWN, onTouch );
+		_titLeft.addEventListener( MouseEvent.MOUSE_UP, onRelease );
+		_titRight.addEventListener( MouseEvent.MOUSE_DOWN, onTouch );
+		_titRight.addEventListener( MouseEvent.MOUSE_UP, onRelease );
+		_body.addEventListener( MouseEvent.MOUSE_DOWN, onTouch );
+		_body.addEventListener( MouseEvent.MOUSE_UP, onRelease );
+		_cunt.addEventListener( MouseEvent.MOUSE_DOWN, onTouch );
+		_cunt.addEventListener( MouseEvent.MOUSE_UP, onRelease );
 		
 		addChild( _container );
 	}
+	
+	private function onTouch( e:MouseEvent ):Void { dispatchEvent( new Event("girlTouched") ); }
+	private function onRelease( e:MouseEvent ):Void { dispatchEvent( new Event("girlReleased") ); }
 	
 }
