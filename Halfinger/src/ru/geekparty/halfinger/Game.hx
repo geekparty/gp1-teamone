@@ -1,8 +1,12 @@
-package ru.geekparty.game;
+package ru.geekparty.halfinger;
 import nme.display.Sprite;
 import nme.events.Event;
 import nme.Lib;
 import nme.Assets;
+import ru.geekparty.game.AnimatedSprite;
+import ru.geekparty.game.Animation;
+import ru.geekparty.game.IUpdatable;
+import ru.geekparty.game.TextureAtlas;
 
 /**
  * ...
@@ -27,14 +31,7 @@ class Game extends Sprite
 		_updatable = [];
 		_tickDt = 1.0 / FPS;
 	
-		
-		
-		for (i in 0...100)
-		{
-			spawnGirl(Math.random() * 480.0, Math.random() * 800.0);
-		}
-		
-		
+		addChild( new Girl() );
 	}
 	
 	private function spawnGirl(x:Float, y:Float):Void
@@ -73,6 +70,8 @@ class Game extends Sprite
 	public function onFrame(e:Event):Void
 	{
 		
+		//TODO: Определиться с надобностью этого кода
+		return;
 		var timer:Float =  Lib.getTimer();
 		
 		var frames:Int = 0;

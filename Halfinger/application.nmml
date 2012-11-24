@@ -9,7 +9,7 @@
 	<app main="ru.geekparty.halfinger.Main" file="Halfinger" path="bin" />
 	
 	<window background="#000000" fps="60" />
-	<window width="800" height="480" unless="mobile" />
+	<window width="480" height="800" unless="mobile" />
 	<window orientation="landscape" vsync="true" antialiasing="0" if="cpp" />
 	
 	<!-- classpath, haxe libs -->
@@ -19,6 +19,9 @@
 	<!-- assets -->
 	<icon path="assets/nme.svg" />
 	<assets path="assets/img" rename="img" />
+	
+	<!-- swf library -->
+	<library path="assets/resources.swf" /> 
 	
 	<!-- DLLs -->
 	<ndll name="std" />

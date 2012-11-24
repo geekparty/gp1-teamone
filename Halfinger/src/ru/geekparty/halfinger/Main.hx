@@ -1,16 +1,19 @@
 package ru.geekparty.halfinger;
 
+import nme.display.FPS;
 import nme.display.Sprite;
 import nme.events.Event;
 import nme.Lib;
 
 /**
  * ...
- * @author bL00RiSe
+ * @author Null/
  */
 
 class Main extends Sprite 
 {
+	
+	var game:Game;
 	
 	public function new() 
 	{
@@ -26,7 +29,11 @@ class Main extends Sprite
 	{
 		// entry point
 		
-		// new to Haxe NME? please read *carefully* the readme.txt file!
+		var game:Game = new Game();
+		game.Start();
+		addChild(game);
+		
+		addChild( new FPS(10,10,0xffffff));
 	}
 	
 	static public function main() 
