@@ -19,7 +19,6 @@
 	
 	<!-- assets -->
 	<icon path="assets/nme.svg" />
-	<assets path="assets/img" rename="img" />
 
 	<assets path="assets/music" rename="assets/music" type="music" include="*" />
 
