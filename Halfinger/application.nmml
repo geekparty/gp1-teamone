@@ -3,7 +3,7 @@
 	<!-- NMML reference: https://gist.github.com/1763850 -->
 	
 	<!-- metadata, make sure 'package' is at least 3 segments (ie. com.mycompany.myproject) -->
-	<meta title="Halfinger" package="ru.geekparty.halfinger.Halfinger" version="1.0.0" company="bL00RiSe" />
+	<meta title="Half Finger 4 the Princess" package="ru.geekparty.halfinger.Halfinger" version="1.0.0" company="GeekParty.ru" />
 	
 	<!-- output -->
 	<app main="ru.geekparty.halfinger.Main" file="Halfinger" path="bin" />
@@ -19,8 +19,13 @@
 	
 	<!-- assets -->
 	<icon path="assets/nme.svg" />
-
+	
+	
+	<assets path="assets/img"   rename="assets/img" include="*" type="image" />
 	<assets path="assets/music" rename="assets/music" type="music" include="*" />
+	
+	<setenv name="JAVA_HOME" value="C:\Program Files\Java\jdk1.6.0_29" if="android" />
+	
 
 
 	

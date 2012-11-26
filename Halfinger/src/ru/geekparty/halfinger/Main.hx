@@ -34,12 +34,11 @@ class Main extends Sprite
 	{
 		// entry point
 		
-		var game:Game = new Game();
-		game.Start();
+		var game:Game = new Game();		
 		addChild(game);
 		
 		
-		var scale:Float =  stage.stageWidth / viewPortW;
+		var scale:Float =  stage.stageHeight / viewPortH;
 		game.scaleX = game.scaleY = scale;
 		
 		addChild( new FPS(10,10,0xffffff));

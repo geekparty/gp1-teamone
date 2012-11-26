@@ -3,13 +3,15 @@ import format.swf.MovieClip;
 import nme.display.Sprite;
 import nme.events.Event;
 import nme.events.MouseEvent;
+import com.eclecticdesignstudio.motion.Actuate;
+import ru.geekparty.game.IUpdatable;
 
 /**
  * ...
  * @author bL00RiSe
  */
 
-class Girl extends Sprite
+class Girl extends Sprite, implements IUpdatable
 {
 	private var _container : GirlContainer;
 
@@ -20,6 +22,8 @@ class Girl extends Sprite
 	private var _cunt:MovieClip;
 	
 	public var scoreMultipler : Float;
+	
+	var currentClip:MovieClip;
 
 	public function new() 
 	{
@@ -60,7 +64,14 @@ class Girl extends Sprite
 	
 	private function onTouch( e:MouseEvent ):Void 
 	{
-		cast(e.currentTarget, MovieClip).play();
+		trace("onTouch");
+		//cast(e.currentTarget, MovieClip).gotoAndPlay(2);
+		
+		currentClip = cast(e.currentTarget, MovieClip);
+		
+		//currentClip.currentFrame = 2;
+		//Actuate.tween(currentClip, 0.3, { "currentFrame" : frames } );
+		
 		switch( cast(e.currentTarget, MovieClip).name )
 		{
 			case "face"     : scoreMultipler = 0.8;
@@ -73,12 +84,31 @@ class Girl extends Sprite
 	}
 	private function onRelease( e:MouseEvent ):Void
 	{
+		trace("onRelease");
+		currentClip = null;
 		_face.gotoAndStop(1);
 		_titLeft.gotoAndStop(1);
 		_titRight.gotoAndStop(1);
 		_body.gotoAndStop(1);
 		_cunt.gotoAndStop(1);
 		dispatchEvent( new Event("girlReleased") );
+	}
+	
+	public function update(dt:Float):Void
+	{
+		if (currentClip == null) return;
+		
+		var frames:Int = currentClip.totalFrames;		
+		
+		if (currentClip.currentFrame < frames)
+		{
+			currentClip.nextFrame();
+		}
+		else
+		{
+			currentClip.gotoAndStop(2);
+		}
+		
 	}
 	
 }
