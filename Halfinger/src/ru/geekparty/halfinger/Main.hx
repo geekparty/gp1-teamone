@@ -27,6 +27,7 @@ class Main extends Sprite
 		Lib.current.stage.addEventListener(Event.RESIZE, init);
 		#else
 		addEventListener(Event.ADDED_TO_STAGE, init);
+		addEventListener(Event.RESIZE, onResize);
 		#end
 	}
 
@@ -42,6 +43,12 @@ class Main extends Sprite
 		game.scaleX = game.scaleY = scale;
 		
 		addChild( new FPS(10,10,0xffffff));
+	}
+	
+	private function onResize(e:Event)
+	{
+		var scale:Float =  stage.stageHeight / viewPortH;
+		game.scaleX = game.scaleY = scale;
 	}
 	
 	static public function main() 

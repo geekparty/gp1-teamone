@@ -52,6 +52,13 @@ class Girl extends Sprite, implements IUpdatable
 		//_body.addEventListener( MouseEvent.MOUSE_DOWN, onTouch );
 		_cunt.addEventListener( MouseEvent.MOUSE_DOWN, onTouch );
 		
+		_face.addEventListener( MouseEvent.ROLL_OUT, onRelease );
+		_titLeft.addEventListener( MouseEvent.ROLL_OUT, onRelease );
+		_titRight.addEventListener( MouseEvent.ROLL_OUT, onRelease );
+		_cunt.addEventListener( MouseEvent.ROLL_OUT, onRelease );
+		
+		
+		
 		addEventListener( Event.ADDED_TO_STAGE, onStageInit );
 		
 		addChild( _container );
@@ -65,7 +72,7 @@ class Girl extends Sprite, implements IUpdatable
 	private function onTouch( e:MouseEvent ):Void 
 	{
 		trace("onTouch");
-		//cast(e.currentTarget, MovieClip).gotoAndPlay(2);
+		cast(e.currentTarget, MovieClip).gotoAndPlay(2);
 		
 		currentClip = cast(e.currentTarget, MovieClip);
 		
@@ -84,6 +91,8 @@ class Girl extends Sprite, implements IUpdatable
 	}
 	private function onRelease( e:MouseEvent ):Void
 	{
+		if (currentClip == null) return;
+		
 		trace("onRelease");
 		currentClip = null;
 		_face.gotoAndStop(1);
@@ -96,6 +105,8 @@ class Girl extends Sprite, implements IUpdatable
 	
 	public function update(dt:Float):Void
 	{
+		return;
+		/*
 		if (currentClip == null) return;
 		
 		var frames:Int = currentClip.totalFrames;		
@@ -108,6 +119,7 @@ class Girl extends Sprite, implements IUpdatable
 		{
 			currentClip.gotoAndStop(2);
 		}
+		*/
 		
 	}
 	

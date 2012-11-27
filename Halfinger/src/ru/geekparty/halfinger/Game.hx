@@ -27,6 +27,7 @@ import com.eclecticdesignstudio.motion.easing.Quad;
 
 import nme.events.MouseEvent;
 
+
 /**
  * ...
  * @author Null/
@@ -92,6 +93,9 @@ class Game extends Sprite
 		_prevMousePos = new Point( mouseX, mouseY );
 		
 		sound = Assets.getSound ("assets/music/gp_emma.mp3");
+	
+		
+				
 		
 		
 		
@@ -104,6 +108,12 @@ class Game extends Sprite
 		var splash:BitmapData = Assets.getBitmapData("assets/img/splash.jpg");		
 		splashScreen = new Sprite();
 		splashScreen.addChild(new Bitmap(splash));
+		
+		//FIXME: this is hack to put win/loose screens into cache before starting game
+		addChild(new EndGood());
+		addChild(new EndBad());
+		
+		
 		addChild(splashScreen);
 		
 		splashScreen.addEventListener( Event.ADDED_TO_STAGE, function(e:Event):Void
@@ -144,16 +154,18 @@ class Game extends Sprite
 		_girl.addEventListener( "girlTouched", onGirlTouched );
 		_girl.addEventListener( "girlReleased", onGirlReleased );
 		
-		_updatable.push(_girl);
+		//_updatable.push(_girl);
 		
 		_axe = new AxeContainer();
+		_axe.mouseEnabled = false;
+		_axe.mouseChildren = false;
 		_axeHitArea = cast _axe.getChildByName("axeHitArea");
 		//_axe.gotoAndStop( 0 );
 		_axe.rotation = 90;
 		addChild( _axe );
 		
 		_scoreBar = new ProgressContainer();
-		_scoreBar.gotoAndStop(0);
+		_scoreBar.gotoAndStop(1);
 		addChild( _scoreBar );
 		
 		_axe.x = 600;
@@ -174,6 +186,7 @@ class Game extends Sprite
 		
 		Actuate.stop(_axe);
 		_axe.rotation = 90;
+		_scoreBar.gotoAndStop(1);
 		
 	/*
 		removeChild( _girl );
@@ -191,12 +204,23 @@ class Game extends Sprite
 	private function onGirlTouched( e:Event ):Void 
 	{ 
 		Lib.trace("Нажал бабу!");
-		currentChannel = sound.play(0, -1);
+		if (!_soundPlaying)
+		{
+			currentChannel = sound.play(0, -1);
+			_soundPlaying = true;
+			Timer.delay(function():Void {
+				currentChannel.stop();
+				_soundPlaying = false;
+				}
+			, 10000 );
+			
+		}
+		
 		_scoreCounting = true;
 		Timer.delay(onAxeTimer, Math.floor(Math.random() * 3000));
+		
 	}
-	private function onGirlReleased( e:Event ):Void {
-		currentChannel.stop();
+	private function onGirlReleased( e:Event ):Void {				
 		Lib.trace("Отпусиил бабу!");
 		_scoreCounting = false; 		
 		//Actuate.reset();
@@ -230,7 +254,7 @@ class Game extends Sprite
 		{
 			_axeMoving = true;
 			_axeRevert = false;
-			Actuate.tween( _axe, 1.2, {rotation : -40 } ).onComplete( revertAxe ).ease(Quad.easeIn);
+			Actuate.tween( _axe, 0.8, {rotation : -40 } ).onComplete( revertAxe ).ease(Quad.easeIn);
 		}
 	}
 	
@@ -293,7 +317,9 @@ class Game extends Sprite
 		if ((_scoreCounting) && (!_axeRevert))
 		{
 			var normRotation:Float =  1 - ((_axe.rotation + 40) / 130);
-			normRotation *= normRotation;
+			//normRotation *= normRotation;
+			
+			
 			var p:Point = globalToLocal(new Point(mouseX, mouseY));
 			var normY:Float =  p.y / stage.stageHeight;
 			
