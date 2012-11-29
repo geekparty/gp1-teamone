@@ -60,7 +60,13 @@ class Game extends Sprite
 	private var _axeHitArea:MovieClip;
 	private var _prevMousePos : Point;
 	
-	private var sound:Sound;
+	
+	private var gameSound:Array<Sound>;
+	private var gameSoundLengthMs:Array<Int>;
+	private var winSound:Sound;
+	
+	
+	
 	private var currentChannel:SoundChannel;
 	
 	
@@ -92,13 +98,16 @@ class Game extends Sprite
 		addEventListener( Event.ADDED_TO_STAGE, addSplash );
 		_prevMousePos = new Point( mouseX, mouseY );
 		
-		sound = Assets.getSound ("assets/music/gp_emma.mp3");
-	
 		
-				
+		gameSound = [
+			Assets.getSound ("assets/music/gp_emma.mp3")
+			, Assets.getSound ("assets/music/moan1.mp3")
+			, Assets.getSound ("assets/music/moan2.mp3")
+		];
 		
+		gameSoundLengthMs = [9990, 1300, 2300];
 		
-		
+		winSound = Assets.getSound ("assets/music/orgasm.mp3");
 		//Actuate.timer(2.0 + Math.random() * 3.0).onComplete(onAxeTimer);
 		//Timer.delay( onAxeTimer, Std.int( 2000 + Math.random() * 3000 ) );
 	}
@@ -188,6 +197,11 @@ class Game extends Sprite
 		_axe.rotation = 90;
 		_scoreBar.gotoAndStop(1);
 		
+		if (win)
+		{
+			winSound.play();
+		}
+		
 	/*
 		removeChild( _girl );
 		removeChild( _axe );
@@ -203,25 +217,46 @@ class Game extends Sprite
 	
 	private function onGirlTouched( e:Event ):Void 
 	{ 
-		Lib.trace("Нажал бабу!");
+		
 		if (!_soundPlaying)
 		{
-			currentChannel = sound.play(0, -1);
-			_soundPlaying = true;
-			Timer.delay(function():Void {
-				currentChannel.stop();
-				_soundPlaying = false;
-				}
-			, 10000 );
-			
+			_chooseSound();			
 		}
 		
 		_scoreCounting = true;
 		Timer.delay(onAxeTimer, Math.floor(Math.random() * 3000));
 		
 	}
+	
+	private function _chooseSound():Void
+	{
+		//var soundInd:Int = Math.floor(Math.min( Math.random() * (gameSound.length), gameSound.length));
+		
+		var soundInd:Int = 0;
+		switch(_girl.scoreMultipler)
+		{
+			case 0.2:
+				soundInd = 2;
+			case 0.6:
+				soundInd = 1;
+			case 0.8:
+				soundInd = 0;
+		}
+			
+		var sound:Sound =  gameSound[soundInd];
+		Timer.delay(onSoundComplete, gameSoundLengthMs[soundInd]);		
+		currentChannel = sound.play();
+		_soundPlaying = true;
+	}
+	
+	private function onSoundComplete():Void
+	{
+		currentChannel.stop();
+		_soundPlaying = false;
+	}
+	
 	private function onGirlReleased( e:Event ):Void {				
-		Lib.trace("Отпусиил бабу!");
+		
 		_scoreCounting = false; 		
 		//Actuate.reset();
 	}
@@ -233,7 +268,7 @@ class Game extends Sprite
 	
 	private function onAxeTimer():Void
 	{
-		Lib.trace("AXE!");
+		
 		//if (timerAxe != null) Actuate.stop(timerAxe);
 		
 		//timerAxe = Actuate.timer(Math.random() * 3.0).onComplete(onAxeTimer);

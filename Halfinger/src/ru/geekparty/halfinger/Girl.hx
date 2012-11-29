@@ -71,7 +71,7 @@ class Girl extends Sprite, implements IUpdatable
 	
 	private function onTouch( e:MouseEvent ):Void 
 	{
-		trace("onTouch");
+		
 		cast(e.currentTarget, MovieClip).gotoAndPlay(2);
 		
 		currentClip = cast(e.currentTarget, MovieClip);
@@ -93,7 +93,7 @@ class Girl extends Sprite, implements IUpdatable
 	{
 		if (currentClip == null) return;
 		
-		trace("onRelease");
+		
 		currentClip = null;
 		_face.gotoAndStop(1);
 		_titLeft.gotoAndStop(1);

@@ -42,7 +42,7 @@ class Main extends Sprite
 		var scale:Float =  stage.stageHeight / viewPortH;
 		game.scaleX = game.scaleY = scale;
 		
-		addChild( new FPS(10,10,0xffffff));
+		//addChild( new FPS(10,10,0xffffff));
 	}
 	
 	private function onResize(e:Event)
